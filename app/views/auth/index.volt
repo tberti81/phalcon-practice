@@ -1,11 +1,11 @@
-{{ form('auth/auth', 'method': 'post') }}
+{{ form(form.getAction(), 'method': 'post') }}
 
     <label for="name">Username</label>
-    {{ text_field("username", "size": 32) }}
+    {{ form.render('username') }}
 
     <label for="type">Password</label>
-    {{ password_field("password", "size": 32) }}
+    {{ form.render('password') }}
 
-    {{ submit_button('Send') }}
+    {{ form.render('submit') }}
 
 {{ end_form() }}

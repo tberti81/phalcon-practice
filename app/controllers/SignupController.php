@@ -5,20 +5,31 @@ class SignupController extends ControllerBase
 
     public function indexAction()
     {
-
+	    $this->view->setVar('form', new SignupForm());
     }
 
 	public function signupAction()
 	{
 
-		$hash = $this->cryptPassword($this->request->getPost('password'), 10);
+		$form = new SignupForm();
+		if (!$form->isValid($this->request->getPost()))
+		{
+			foreach ($form->getMessages() as $message)
+			{
+				$this->flash->error($message);
+			}
+		}
+		else
+		{
+			$hash = $this->cryptPassword($this->request->getPost('password'), 10);
 
-		echo $this->request->getPost('username') . ' ' . $this->request->getPost('password') . ' ' . $hash;
+			echo $this->request->getPost('username') . ' ' . $this->request->getPost('password') . ' ' . $hash;
 
-		$user = new User();
-		$user->setUsername($this->request->getPost('username'));
-		$user->setPassword($hash);
-		$user->save();
+			$user = new User();
+			$user->setUsername($this->request->getPost('username'));
+			$user->setPassword($hash);
+			$user->save();
+		}
 	}
 
 	/**
