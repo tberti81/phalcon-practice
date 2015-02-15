@@ -2,7 +2,6 @@
 
 class AuthController extends ControllerBase
 {
-
     public function indexAction()
     {
 	    $this->view->setVar('form', new AuthForm());
@@ -27,7 +26,8 @@ class AuthController extends ControllerBase
 
 			if ($userRecord->getPassword() === crypt($this->request->getPost('password'), $userRecord->getPassword()))
 			{
-				echo 'Welcome ' . $this->request->getPost('username') . '!';
+				$this->session->set('user', $this->request->getPost('username'));
+				echo 'Welcome ' . $this->session->get('user') . '!';
 			}
 			else
 			{
@@ -36,5 +36,9 @@ class AuthController extends ControllerBase
 		}
 	}
 
+	public function logoutAction()
+	{
+		$this->session->destroy();
+		$this->dispatcher->forward(array('controller' => 'auth', 'action' => 'index'));
+	}
 }
-
